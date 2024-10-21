@@ -2,10 +2,17 @@ import {Alert, ScrollView, StyleSheet, View} from 'react-native';
 import React from 'react';
 import CustomText from '../components/CustomText';
 import {Formik} from 'formik';
-import {Button, Input, Toggle} from '@ui-kitten/components';
+import {Button, Input, Toggle, Icon} from '@ui-kitten/components';
 import * as Yup from 'yup';
 
 const FormikYup = () => {
+  const ErrorMessage = ({error, touched}) => {
+    if (!error || !touched) return null;
+    return <CustomText style={styles.errorText}>{error}</CustomText>;
+  };
+  // ikonlar
+  const AlertIcon = props => <Icon {...props} name="alert-circle-outline" />;
+
   const registerSchema = Yup.object().shape({
     name: Yup.string().required('Zorunlu Alan'),
     surname: Yup.string().required('Zorunlu Alan'),
@@ -37,7 +44,7 @@ const FormikYup = () => {
       </View>
 
       <View style={{flex: 1, padding: 10}}>
-        <ScrollView>
+        <ScrollView automaticallyAdjustKeyboardInsets>
           <Formik
             initialValues={{
               email: '',
@@ -55,73 +62,125 @@ const FormikYup = () => {
                 JSON.stringify(values, null, 2),
               );
             }}>
-            {({values, handleChange, handleSubmit, errors, setFieldValue}) => (
+            {({
+              values,
+              handleChange,
+              handleSubmit,
+              errors,
+              setFieldValue,
+              handleBlur,
+              touched,
+              accessoryRight,
+            }) => (
               <View>
                 <Input
                   size="large"
-                  style={{marginVertical: 10}}
+                  style={styles.input}
                   value={values.name}
                   label={'İsim:'}
                   placeholder="İsim giriniz . . . "
                   onChangeText={handleChange('name')}
-                  status={errors.name ? 'danger' : 'basic'}
-                  caption={errors.name}
+                  onBlur={handleBlur('name')}
+                  status={errors.name && touched.name ? 'danger' : 'basic'}
+                  accessoryRight={errors.name && touched.name && AlertIcon}
                 />
+                <ErrorMessage error={errors.name} touched={touched.name} />
+
                 <Input
                   size="large"
-                  style={{marginVertical: 10}}
+                  style={styles.input}
                   value={values.surname}
                   label={'Soyadı:'}
                   placeholder="Soyadı giriniz . . . "
                   onChangeText={handleChange('surname')}
-                  status={errors.surname ? 'danger' : 'basic'}
-                  caption={errors.surname}
+                  onBlur={handleBlur('surname')}
+                  status={
+                    errors.surname && touched.surname ? 'danger' : 'basic'
+                  }
+                  accessoryRight={
+                    errors.surname && touched.surname && AlertIcon
+                  }
                 />
+                <ErrorMessage
+                  error={errors.surname}
+                  touched={touched.surname}
+                />
+
                 <Input
                   size="large"
-                  style={{marginVertical: 10}}
+                  style={styles.input}
                   value={values.email}
                   label={'Email:'}
                   placeholder="Email giriniz . . . "
                   onChangeText={handleChange('email')}
-                  status={errors.email ? 'danger' : 'basic'}
-                  caption={errors.email}
+                  onBlur={handleBlur('email')}
+                  status={errors.email && touched.email ? 'danger' : 'basic'}
+                  accessoryRight={errors.email && touched.email && AlertIcon}
                 />
+                <ErrorMessage error={errors.email} touched={touched.email} />
+
                 <Input
                   size="large"
-                  style={{marginVertical: 10}}
+                  style={styles.input}
                   value={values.phone}
                   label={'Telefon:'}
-                  placeholder="Telefon giriniz . . . "
+                  placeholder="Ör:05 _ _ "
                   onChangeText={handleChange('phone')}
-                  status={errors.phone ? 'danger' : 'basic'}
-                  caption={errors.phone}
+                  onBlur={handleBlur('phone')}
+                  status={errors.phone && touched.phone ? 'danger' : 'basic'}
+                  accessoryRight={errors.phone && touched.phone && AlertIcon}
                 />
+                <ErrorMessage error={errors.phone} touched={touched.phone} />
+
                 <Input
                   size="large"
-                  style={{marginVertical: 10}}
+                  style={styles.input}
                   value={values.password}
                   label={'Şifre:'}
                   placeholder="Şifre giriniz . . . "
                   onChangeText={handleChange('password')}
-                  status={errors.password ? 'danger' : 'basic'}
-                  caption={errors.password}
+                  onBlur={handleBlur('password')}
+                  status={
+                    errors.password && touched.password ? 'danger' : 'basic'
+                  }
+                  accessoryRight={
+                    errors.password && touched.password && AlertIcon
+                  }
                 />
+                <ErrorMessage
+                  error={errors.password}
+                  touched={touched.password}
+                />
+
                 <Input
                   size="large"
-                  style={{marginVertical: 10}}
+                  style={styles.input}
                   value={values.passwordConfirm}
                   label={'Şifre Tekrar:'}
                   placeholder="Şifre Tekrar giriniz . . . "
                   onChangeText={handleChange('passwordConfirm')}
-                  status={errors.passwordConfirm ? 'danger' : 'basic'}
-                  caption={errors.passwordConfirm}
+                  onBlur={handleBlur('passwordConfirm')}
+                  status={
+                    errors.passwordConfirm && touched.passwordConfirm
+                      ? 'danger'
+                      : 'basic'
+                  }
+                  accessoryRight={
+                    errors.passwordConfirm &&
+                    touched.passwordConfirm &&
+                    AlertIcon
+                  }
                 />
+                <ErrorMessage
+                  error={errors.passwordConfirm}
+                  touched={touched.passwordConfirm}
+                />
+
                 <View style={{paddingHorizontal: 20}}>
                   <Toggle
                     style={{marginTop: 10, marginHorizontal: 10}}
-                    checked={values.aggrementConfirm} // 'value' yerine 'checked' kullanılmalı
-                    onChange={value => setFieldValue('aggrementConfirm', value)} // Değeri güncellemek için setFieldValue kullanılır
+                    checked={values.aggrementConfirm}
+                    onChange={value => setFieldValue('aggrementConfirm', value)}
                     status={errors.aggrementConfirm ? 'danger' : 'basic'}>
                     Kullanıcı Sözleşmesini ve Gizlilik Anlaşmasını Kabul
                     Ediyorum.
@@ -144,7 +203,6 @@ const FormikYup = () => {
               </View>
             )}
           </Formik>
-          <CustomText>Selam</CustomText>
         </ScrollView>
       </View>
     </View>
@@ -159,7 +217,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   headerContainer: {
-    minHeight: 125,
+    minHeight: 75,
     padding: 20,
     backgroundColor: '#00e096',
     justifyContent: 'flex-end',
@@ -169,5 +227,11 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  errorText: {
+    color: 'red',
+  },
+  input: {
+    marginVertical: 10,
   },
 });

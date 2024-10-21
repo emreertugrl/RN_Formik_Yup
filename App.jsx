@@ -1,15 +1,18 @@
-import {StyleSheet} from 'react-native';
 import React from 'react';
 import FormikYup from './src/example/FormikYup';
 
 import * as eva from '@eva-design/eva';
-import {ApplicationProvider} from '@ui-kitten/components';
+import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
+import {EvaIconsPack} from '@ui-kitten/eva-icons';
 
 const App = () => {
   return (
-    <ApplicationProvider {...eva} theme={eva.light}>
-      <FormikYup />
-    </ApplicationProvider>
+    <>
+      <IconRegistry icons={EvaIconsPack} />
+      <ApplicationProvider {...eva} theme={eva.light}>
+        <FormikYup />
+      </ApplicationProvider>
+    </>
   );
 };
 

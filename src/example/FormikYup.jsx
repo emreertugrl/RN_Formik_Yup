@@ -70,7 +70,6 @@ const FormikYup = () => {
               setFieldValue,
               handleBlur,
               touched,
-              accessoryRight,
             }) => (
               <View>
                 <Input
@@ -180,12 +179,13 @@ const FormikYup = () => {
                   <Toggle
                     style={{marginTop: 10, marginHorizontal: 10}}
                     checked={values.aggrementConfirm}
-                    onChange={value => setFieldValue('aggrementConfirm', value)}
-                    status={errors.aggrementConfirm ? 'danger' : 'basic'}>
+                    onChange={value =>
+                      setFieldValue('aggrementConfirm', value)
+                    }>
                     Kullanıcı Sözleşmesini ve Gizlilik Anlaşmasını Kabul
                     Ediyorum.
                   </Toggle>
-                  {errors.aggrementConfirm && (
+                  {touched.aggrementConfirm && errors.aggrementConfirm && (
                     <CustomText style={{color: 'red'}}>
                       Kullanıcı sözleşmesini ve gizlilik anlaşmasını kabul
                       etmelisiniz.
